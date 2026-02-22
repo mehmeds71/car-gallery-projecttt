@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZenWay Auto Gallery</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f4f4f4;
+}
+
+header{
+    background:#111;
+    color:white;
+    padding:20px;
+    text-align:center;
+}
+
+.controls{
+    padding:20px 10%;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:15px;
+}
+
+select{
+    padding:8px;
+    font-size:16px;
+}
+
+.cars{
+    padding:30px 10%;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+}
+
+.card{
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+}
+
+.card img{
+    width:100%;
+    height:200px;
+    object-fit:cover;
+}
+
+.card-body{
+    padding:15px;
+}
+
+.price{
+    color:orange;
+    font-weight:bold;
+    margin:10px 0;
+}
+
+button{
+    padding:8px 15px;
+    border:none;
+    background:orange;
+    color:white;
+    cursor:pointer;
+    border-radius:5px;
+}
+
+button:hover{
+    background:darkorange;
+}
+
+footer{
+    background:#111;
+    color:white;
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>🚗 ZenWay Auto Gallery</h1>
+</header>
+
+<div class="controls">
+    <div>
+        <label>Filter by Brand:</label>
+        <select id="brandFilter">
+            <option value="all">All</option>
+            <option value="Mercedes">Mercedes</option>
+            <option value="BMW">BMW</option>
+            <option value="Audi">Audi</option>
+        </select>
+    </div>
+
+    <div>
+        <label>Sort by Price:</label>
+        <select id="priceSort">
+            <option value="default">Default</option>
+            <option value="low">Low to High</option>
+            <option value="high">High to Low</option>
+        </select>
+    </div>
+</div>
+
+<section class="cars" id="carList"></section>
+
+<footer>
+    © 2026 ZenWay Auto Gallery. All Rights Reserved.
+</footer>
+
+<script>
+const cars = [
+    {
+        brand: "Mercedes",
+        model: "E 220 CDI",
+        price: 25000,
+        image: "https://images.unsplash.com/photo-1549924231-f129b911e442"
+    },
+    {
+        brand: "BMW",
+        model: "520d",
+        price: 22000,
+        image: "https://images.unsplash.com/photo-1555215695-3004980ad54e"
+    },
+    {
+        brand: "Audi",
+        model: "A6 2.0 TDI",
+        price: 24500,
+        image: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c"
+    },
+    {
+        brand: "Mercedes",
+        model: "C 200",
+        price: 20000,
+        image: "https://images.unsplash.com/photo-1493238792000-8113da705763"
+    }
+];
+
+const carList = document.getElementById("carList");
+const brandFilter = document.getElementById("brandFilter");
+const priceSort = document.getElementById("priceSort");
+
+function displayCars(filteredCars){
+    carList.innerHTML = "";
+
+    filteredCars.forEach(car => {
+        carList.innerHTML += `
+            <div class="card">
+                <img src="${car.image}">
+                <div class="card-body">
+                    <h3>${car.brand} ${car.model}</h3>
+                    <p class="price">$${car.price.toLocaleString()}</p>
+                    <button>View Details</button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+function filterAndSort(){
+    let filtered = [...cars];
+
+    if(brandFilter.value !== "all"){
+        filtered = filtered.filter(car => car.brand === brandFilter.value);
+    }
+
+    if(priceSort.value === "low"){
+        filtered.sort((a,b) => a.price - b.price);
+    }
+    else if(priceSort.value === "high"){
+        filtered.sort((a,b) => b.price - a.price);
+    }
+
+    displayCars(filtered);
+}
+
+brandFilter.addEventListener("change", filterAndSort);
+priceSort.addEventListener("change", filterAndSort);
+
+displayCars(cars);
+</script>
+
+</body>
+</html>
